@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8"></meta>
+    <title>償却資産仮計算</title>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="css/depreciable_assets.css"></link>
+    <script src="js/depreciable_assets.js"></script>
+</head>
+
+<body>
+    <header id="header" class="mb-3">
+        <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+            <a class="navbar-brand" href="#">
+                <strong>償却資産仮計算</strong>
+            </a>
+            <a href="#">
+                <button class="btn btn-outline-warning">ヘルプページ</button>
+            </a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="card mb-3 ml-3">
+                <h5 class="text-white bg-primary card-header">
+                    <b>課税年度</b>
+                </h5>
+                <div class="card-body">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <div class="page-link" id="previous" onClick="recalcTaxPrice(-1)">Previous</div>
+                            </li>
+                            <li class="page-item disabled">
+                                <div class="page-link" id="tax-year">2019</div>
+                            </li>
+                            <li class="page-item">
+                                <div class="page-link" id="next" onClick="recalcTaxPrice(1)">Next</div>
+                            </li>
+                            <li class="page-item">
+                                <div class="page-link" id="back" onClick="backThisYear()">This Year</div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="card mb-3 ml-3">
+                <h5 class="text-white bg-primary card-header">
+                    <b>ファイル読み込み</b>
+                </h5>
+                <div class="card-body">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="select-file"></input>
+                            <label class="custom-file-label" for="select-file">ファイル選択</label>
+                        </div>
+                    </div>
+                    <span class="badge badge-info" id="input-file-name"></span>
+                </div>
+            </div>
+            <div class="card mb-3 ml-3">
+                <h5 class="text-white bg-primary card-header">
+                    <b>ファイル保存</b>
+                </h5>
+                <div class="card-body">
+                    <form name="savefile">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="save-file-name" id="save-file-name" required="" placeholder="ファイル名"></input>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-outline-warning" id="save-tsv" href="#" onClick="fileDownload()">保存</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <form>
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input class="form-control" type="text" name="assets-name" id="assets-name" required=""></input>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label>取得年月</label>
+                            <input class="form-control" type="text" name="assets-date" id="assets-date" required="" placeholder="43012"></input>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>耐用年数</label>
+                            <input class="form-control" type="number" name="assets-life" id="assets-life" required=""></input>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>取得価格</label>
+                        <input class="form-control" type="number" name="assets-value" id="assets-value" required=""></input>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" id="calculation" onClick="displayResult()">計算</button>
+                </form>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <div class="card mb-3">
+                    <h5 class="text-white bg-info card-header">
+                        <b>合計</b>
+                    </h5>
+                    <div class="card-body">
+                        <div class="card-text mb-3">課税標準額</div>
+                        <div class="card-title mb-3" id="sum">0</div>
+                        <div class="card-text mb-3">税額</div>
+                        <div class="card-title" id="tax">0</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-danger" onClick="deleteItems()">削除</button>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered" id="result">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">名称</th>
+                    <th scope="col">取得年月</th>
+                    <th scope="col">耐用年数</th>
+                    <th scope="col">取得価格</th>
+                    <th scope="col">課税標準額</th>
+                    <th scope="col">削除</th>
+                </tr>
+                <tbody>
+                </tbody>
+            </thead>
+        </table>
+    </div>
+</body>
+
+</html>
