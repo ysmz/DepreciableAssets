@@ -50,7 +50,7 @@ function displayResult() {
         return;
     }
 
-    var tax_year_date = new Date(Number(document.getElementById('tax-year').innerHTML), 1, 1);
+    var tax_year_date = new Date(Number(convertYearsJpToUs(document.getElementById('tax-year').innerHTML)), 1, 1);
 
     createResultTable(document.getElementById('assets-name').value, assets_date_value, life, price, tax_year_date);
 }
@@ -74,8 +74,8 @@ function createResultTable(assets_name, assets_date_value, life, price, tax_year
 
 function recalcTaxPrice(tax_year) {
     var tax_year_tag = document.getElementById('tax-year');
-    var tax_year_val = Number(tax_year_tag.innerHTML) + tax_year;
-    tax_year_tag.innerHTML = tax_year_val;
+    var tax_year_val = convertYearsJpToUs(tax_year_tag.innerHTML) + tax_year;
+    tax_year_tag.innerHTML = convertYearsUsToJp(Number(tax_year_val));
 
     var result_table = document.getElementById('result');
     var tax_year_date = new Date(tax_year_val, 1, 1);
@@ -130,7 +130,7 @@ function setValuationSum(valuation_sum) {
 }
 
 function backThisYear() {
-    recalcTaxPrice((new Date()).getFullYear() - Number(document.getElementById('tax-year').innerHTML));
+    recalcTaxPrice((new Date()).getFullYear() - Number(convertYearsJpToUs(document.getElementById('tax-year').innerHTML)));
 }
 
 function convertYearsJpToUs(style) {
@@ -177,6 +177,14 @@ function convertYearsDisplayYearToJp(style) {
     return year + style.replace('.', '').slice(1);
 }
 
+function convertYearsUsToJp(year) {
+    if (year > 2019) return '令' + (year - 2018);
+    if (year > 1989) return '平' + (year - 1988);
+    if (year > 1926) return '昭' + (year - 1925);
+    if (year > 1912) return '大' + (year - 1911);
+
+    return null;
+}
 
 function convertDisplayYear(style) {
     var prefix = '';
@@ -220,6 +228,8 @@ function fileDownload() {
 
     fileName = fileName + ".tsv";
 
+    document.getElementById("save-tsv").download = fileName;
+
     var content = "";
     var result_table = document.getElementById('result');
 
@@ -252,7 +262,7 @@ $(function() {
 
 
             var lines = reader.result.split('\n');
-            var tax_year_date = new Date(Number(document.getElementById('tax-year').innerHTML), 1, 1);
+            var tax_year_date = new Date(Number(convertYearsJpToUs(document.getElementById('tax-year').innerHTML)), 1, 1);
 
             for (var i = 0; i < lines.length; i++) {
                 var row = lines[i].split(",");
@@ -264,4 +274,6 @@ $(function() {
 
         });
     });
+
+    document.getElementById('tax-year').innerHTML = convertYearsUsToJp((new Date()).getFullYear());
 });
